@@ -71,3 +71,31 @@ To restore the database, delete the files db/data.db and db/users.db then run ma
 - SQLite
 - Bootstrap 5.3
 - Jinja2 + Bootstrap Icons
+
+## Integración de análisis de seguridad en CI/CD
+
+Se ha implementado un pipeline de seguridad mediante GitHub Actions en el archivo `.github/workflows/security.yml`.
+
+El pipeline se ejecuta automáticamente en cada `push` a la rama `main`, así como en cada `pull_request`.
+
+El flujo realiza las siguientes acciones:
+
+1. Descarga el código del repositorio mediante `actions/checkout`.
+2. Prepara un entorno Python con `actions/setup-python`.
+3. Instala las dependencias del proyecto desde `requirements.txt`.
+4. Instala las herramientas de seguridad Semgrep y pip-audit.
+5. Ejecuta un análisis SAST con Semgrep.
+6. Ejecuta un análisis SCA con pip-audit.
+7. Muestra los resultados en los logs de GitHub Actions.
+
+### SAST con Semgrep
+
+Se ha seleccionado Semgrep como herramienta SAST porque permite analizar estáticamente el código fuente de la aplicación Flask y detectar patrones inseguros, como consultas SQL inseguras, uso incorrecto de datos de entrada o configuraciones débiles.
+
+### SCA con pip-audit
+
+Se ha seleccionado pip-audit como herramienta SCA porque permite analizar las dependencias Python declaradas en `requirements.txt` y detectar versiones con vulnerabilidades conocidas.
+
+### Estrategia de fallo del pipeline
+
+El pipeline está configurado para fallar cuando Semgrep o pip-audit detectan hallazgos relevantes. Esta decisión permite bloquear cambios inseguros antes de que lleguen a la rama principal.
