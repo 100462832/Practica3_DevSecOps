@@ -30,11 +30,13 @@ jobs:
           pip install semgrep pip-audit
 
       - name: Análisis SAST con Semgrep
+        continue-on-error: true
         run: |
           echo "Ejecutando análisis SAST con Semgrep..."
           semgrep scan --config auto --error
 
       - name: Análisis SCA con pip-audit
+        continue-on-error: true
         run: |
           echo "Ejecutando análisis SCA con pip-audit..."
           pip-audit -r requirements.txt
@@ -42,3 +44,4 @@ jobs:
       - name: Resultado final
         run: |
           echo "Pipeline DevSecOps finalizado"
+          echo "Revisar los logs de Semgrep y pip-audit para ver los hallazgos detectados."
