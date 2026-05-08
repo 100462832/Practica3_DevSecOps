@@ -128,7 +128,8 @@ def edit_company(company_id):
     if request.method == 'POST':
         new_name = request.form['company_name']
         new_description = request.form['description']
-        conn.execute("UPDATE companies SET name = '"+new_name+"', description = '"+new_description+"' WHERE id = "+str(company_id))
+        query = "UPDATE companies SET name = ?, description = ? WHERE id = ?"
+	conn.execute(query, (new_name, new_description, company_id))
         conn.commit()
         conn.close()
         flash("Company updated successfully.", "success")
