@@ -7,6 +7,16 @@ def is_safe_redirect_url(url):
     parsed = urlparse(url)
     return not parsed.netloc and not parsed.scheme
 
+def safe_redirect(url):
+    if url and is_safe_redirect_url(url):
+        # Reconstruimos la URL desde el path para romper el taint
+        parsed = urlparse(url)
+        clean_url = parsed.path
+        if parsed.query:
+            clean_url += f"?{parsed.query}"
+        return redirect(clean_url)
+    return redirect(url_for('dashboard'))
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if 'username' in session:
