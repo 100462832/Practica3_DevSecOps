@@ -21,14 +21,12 @@ def login():
             session['role'] = user['role']
             session['company_id'] = user['company_id']
             session.permanent = True
-		safe_next_url = next_url
 		if not next_url.startswith('/') or next_url.startswith('//'):
 			next_url = '/dashboard'
-            return redirect(next_url)
+		return redirect(next_url)
         else:
             flash("Invalid username or password", "danger")
             return render_template('auth/login.html', next_url=next_url)
-    return render_template('auth/login.html', next_url=next_url)
 
 
 @app.route('/logout')
