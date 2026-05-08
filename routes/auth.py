@@ -12,7 +12,7 @@ def login():
         password = request.form['password']
         conn = get_users_connection()
         query = "SELECT * FROM users WHERE username = ? AND password = ?"
-	user = conn.execute(query, (username, hash_password(password))).fetchone()
+        user = conn.execute(query, (username, hash_password(password))).fetchone()
         conn.close()
         
         if user:

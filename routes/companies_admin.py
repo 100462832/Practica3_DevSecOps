@@ -20,7 +20,7 @@ def admin_add_company():
         owner = request.form['owner']
         conn = get_data_connection()
         query = "INSERT INTO companies (name, owner) VALUES (?, ?)"
-	conn.execute(query, (company_name, owner))
+        conn.execute(query, (company_name, owner))
         conn.commit()
         conn.close()
         flash("Company created successfully.", "success")

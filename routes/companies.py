@@ -46,8 +46,8 @@ def list_companies():
     search = request.args.get('q', '')
     if search:
         query = "SELECT * FROM companies WHERE name LIKE ?"
-	search_param = f"%{search}%"
-	companies = conn.execute(query, (search_param,)).fetchall()
+        search_param = f"%{search}%"
+        companies = conn.execute(query, (search_param,)).fetchall()
     else:
         companies = conn.execute("SELECT * FROM companies").fetchall()
 
@@ -67,13 +67,13 @@ def company_detail(company_id):
     if 'username' not in session:
         return redirect('/login')
     conn = get_data_connection()
-    company = conn.execute("SELECT * FROM companies WHERE id = " + str(company_id)).fetchone()
-    comments = conn.execute("SELECT * FROM comments WHERE company_id = " + str(company_id)).fetchall()
+    company = conn.execute("SELECT * FROM companies WHERE id = ?", (company_id,)).fetchone()
+    comments = conn.execute("SELECT * FROM comments WHERE company_id = ?", (company_id,)).fetchall()
     if request.method == 'POST':
         comment = request.form['comment']
         user = session.get('username')
         query = "INSERT INTO comments (company_id, user, comment) VALUES (?, ?, ?)"
-	conn.execute(query, (company_id, user, comment))
+        conn.execute(query, (company_id, user, comment))
         conn.commit()
         conn.close()
         flash("Comment added successfully.", "success")
@@ -105,7 +105,7 @@ def register_company():
         owner = request.form.get('owner', session.get('username'))
         conn = get_data_connection()
         query = "INSERT INTO companies (name, description, owner) VALUES (?, ?, ?)"
-	conn.execute(query, (company_name, description, owner))
+        conn.execute(query, (company_name, description, owner))
         conn.commit()
         conn.close()
         flash("Company registered successfully.", "success")
@@ -118,7 +118,7 @@ def edit_company(company_id):
     if 'username' not in session:
         return redirect('/')
     conn = get_data_connection()
-    company = conn.execute("SELECT * FROM companies WHERE id = "+ str(company_id)).fetchone()
+    company = conn.execute("SELECT * FROM companies WHERE id = ?", (company_id,)).fetchone()
     if not company:
         conn.close()
         return render_template('errors/404.html'), 404
@@ -129,7 +129,7 @@ def edit_company(company_id):
         new_name = request.form['company_name']
         new_description = request.form['description']
         query = "UPDATE companies SET name = ?, description = ? WHERE id = ?"
-	conn.execute(query, (new_name, new_description, company_id))
+        conn.execute(query, (new_name, new_description, company_id))
         conn.commit()
         conn.close()
         flash("Company updated successfully.", "success")
