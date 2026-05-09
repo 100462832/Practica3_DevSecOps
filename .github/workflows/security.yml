@@ -32,7 +32,7 @@ jobs:
       - name: Análisis SAST con Semgrep
         run: |
           echo "Ejecutando análisis SAST con Semgrep..."
-          semgrep scan --config auto --severity ERROR --error
+          semgrep scan --config auto --error
 
       - name: Análisis SCA con pip-audit
         run: |
