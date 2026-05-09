@@ -29,11 +29,16 @@ jobs:
         run: |
           pip install semgrep pip-audit
 
-      - name: Análisis SAST con Semgrep
+      - name: Análisis SAST de warnings con Semgrep
         continue-on-error: true
         run: |
           echo "Ejecutando análisis SAST con Semgrep..."
-          semgrep scan --config auto --error
+          semgrep scan --config auto --severity INFO,WARNING
+
+      - name: Análisis SAST crítico con Semgrep
+        run: |
+          echo "Ejecutando análisis SAST con Semgrep..."
+          semgrep scan --config auto --severity ERROR --error
 
       - name: Análisis SCA con pip-audit
         run: |
